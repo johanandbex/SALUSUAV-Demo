@@ -1,0 +1,50 @@
+﻿@model IEnumerable<SALUSUAV_Demo.Models.FlightData.FlightData>
+
+@{
+    ViewData["Title"] = "Flights";
+}
+
+<h2>Flights</h2>
+<h3></h3>
+<p>
+    <a class="button" asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th width="25%">
+                @Html.DisplayNameFor(model => model.FlightName)
+            </th>
+            <th width="10%">
+                @Html.DisplayNameFor(model => model.FlightDate)
+            </th>
+            <th width="10%">
+                @Html.DisplayNameFor(model => model.Flown)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FlightName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FlightDate)
+                </td>
+                <td>
+                    @(item.Flown ? "Yes" : "No")
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

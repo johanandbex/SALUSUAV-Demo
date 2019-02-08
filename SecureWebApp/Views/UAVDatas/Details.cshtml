@@ -1,0 +1,73 @@
+﻿@using SALUSUAV_Demo.Models.UAVData
+@model UavData
+
+@{
+    ViewData["Title"] = "SAULS UAV";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>UAVData</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Manufacturer)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Manufacturer)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Model)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Model)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PurchaseYear)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PurchaseYear)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxWindSpeed)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MaxWindSpeed)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxAltitude)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MaxAltitude)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Weight)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Weight)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BeyondSightEnabled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BeyondSightEnabled)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SafetyMechanism)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SafetyMechanism)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,78 @@
+﻿@using SALUSUAV_Demo.Models.UAVData
+@model IEnumerable<UavData>
+
+@{
+    ViewData["Title"] = "SALUS UAV";
+}
+
+<h2>UAVs</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Manufacturer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Model)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PurchaseYear)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaxWindSpeed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaxAltitude)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Weight)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BeyondSightEnabled)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SafetyMechanism)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Manufacturer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Model)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PurchaseYear)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxWindSpeed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxAltitude)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Weight)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BeyondSightEnabled)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SafetyMechanism)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

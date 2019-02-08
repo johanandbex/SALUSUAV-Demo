@@ -1,0 +1,270 @@
+﻿@model SALUSUAV_Demo.Models.FlightData.FlighDataEdit
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB51TXN8b1z9-6Sgnl7CXQiAjjk2vdNYrw&libraries=visualization">
+</script>
+
+<h2>Edit</h2>
+
+<h4>FlightData</h4>
+<hr />
+<!-- This is the div that will contain the Google Map -->
+<div id="map_canvas"></div>
+
+<div class="row">
+    <form id="editform" asp-action="Edit">
+        <div class="col-md-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Location" class="control-label"></label>
+                <input id="locform" asp-for="Location" class="form-control" Readonly="readonly" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Latitude" class="control-label"></label>
+                <input id="latform" asp-for="Latitude" class="form-control" />
+                <span asp-validation-for="Latitude" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Longitude" class="control-label"></label>
+                <input id="lonform" asp-for="Longitude" class="form-control" />
+                <span asp-validation-for="Longitude" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Elevation" class="control-label"></label>
+                <input id="elevationform" asp-for="Elevation" class="form-control" />
+                <span asp-validation-for="Elevation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Radius" class="control-label"></label>
+                <input id="radiusform" asp-for="Radius" class="form-control" />
+                <span asp-validation-for="Radius" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="MaxRisk" class="control-label"></label>
+                <input id="MaxRisk" asp-for="MaxRisk" class="form-control" Readonly="readonly" />
+                <span asp-validation-for="MaxRisk" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AvgRisk" class="control-label"></label>
+                <input id="AvgRisk" asp-for="AvgRisk" class="form-control" Readonly="readonly" />
+                <span asp-validation-for="AvgRisk" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+            <a class="button" asp-action="Details" asp-route-id="@Model.Id">Details</a>
+        </div>
+
+    </form>
+</div>
+
+
+
+<!-- Enclose the Javascript in a "section" so that it is rendered in the correct order after scripts have been loaded etc -->
+
+@section mapscripts
+    {
+    <script type="text/javascript">
+        var mylat;
+        var mylng;
+        var myRad;
+        var currentZoom = 16;
+        var screenSize = screen.width;
+       if (screenSize < 800) {
+           currentZoom = 14;
+        }
+        var centre = new window.google.maps.LatLng("@Html.ViewData.Model.Latitude", "@Html.ViewData.Model.Longitude");
+
+        $(document).ready(function() {
+            mylat = "@Html.ViewData.Model.Latitude";
+            mylng = "@Html.ViewData.Model.Longitude";
+            myRad = "@Html.ViewData.Model.Radius";
+            Initialize();
+        });
+
+        function Initialize() {
+            var lat = mylat;
+            var lon = mylng;
+
+            var settingsw3WInit = {
+                "async": true,
+                "crossDomain": true,
+                "url": "https://api.what3words.com/v2/reverse?coords=" +
+                    lat +
+                    "%2C" +
+                    lon +
+                    "&key=W59GIYRH&lang=en&format=json&display=full",
+                "method": "GET",
+                "headers": {}
+            };
+
+            $.ajax(settingsw3WInit).done(function (responseW3WInit) {
+                var oFormObjectW3WInit = document.forms['editform'];
+                var locform = oFormObjectW3WInit.elements["locform"];
+                var words = responseW3WInit["words"];
+                locform.value = words;
+            });
+
+            var rad = myRad;
+            var zoom = currentZoom;
+            window.google.maps.visualRefresh = true;
+            var myplaceNow = new window.google.maps.LatLng(lat, lon);
+            var mapOptions = {
+                zoom: zoom,
+                center: centre,
+                mapTypeId: window.google.maps.MapTypeId.G_NORMAL_MAP
+            };
+            var mapedit = new window.google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+            var marker = new window.google.maps.Marker({
+                position: myplaceNow,
+                map: mapedit,
+                title: 'Fly here'
+            });
+            marker.setMap(mapedit);
+
+            var dataObject = { id: "@Html.ViewData.Model.Id", latitudeIn: lat, longitudeIn: lon, radiusIn: rad };
+            var url = '@Url.Action("Get3Ug", "FlightDatas")';
+            var locationsGround = [];
+            var locationsAir = [];
+            var locationAll = [];
+            var maxRisk = 0;
+            var totalRisk = 0;
+            var avgRisk = 0;
+            $.get(url,
+                dataObject,
+                function(response) {
+                    var allRes = JSON.parse(response);
+                    var revMap = allRes.REV_map;
+
+                    for (var i = 0; i < revMap.length; i++) {
+                        var row = revMap[i];
+                        var latHere = row.lat;
+                        var lonHere = row.lng;
+                        var riskGround = row.gnd;
+                        var riskAir = row.air;
+                        var riskG = parseFloat(riskGround);
+                        if (!isNaN(riskG)) {
+                            totalRisk += riskG;
+                            if (riskG > maxRisk) {
+                                maxRisk = riskG;
+                            }
+                            if (riskG > 0.005) {
+                                locationsGround.push(new window.google.maps.LatLng(latHere, lonHere));
+                            }
+                        }
+
+                        var riskA = parseFloat(riskAir);
+                        if (!isNaN(riskA)) {
+                            totalRisk += riskA;
+                            if (riskA > maxRisk) {
+                                maxRisk = riskA;
+                            }
+                            if (riskA > 0.005) {
+                                locationsAir.push(new window.google.maps.LatLng(latHere, lonHere));
+                            }
+                        }
+                        var totalRiskLen = locationsAir.length + locationsGround.length;
+                        if (totalRiskLen > 0) {
+                            avgRisk = totalRisk / totalRiskLen;
+                        }
+                        else {
+                            avgRisk = 0;
+                        }
+                        var oFormObjectrisk = document.forms['editform'];
+                        var maxRiskForm = oFormObjectrisk.elements["MaxRisk"];
+                        var avgRiskForm = oFormObjectrisk.elements["AvgRisk"];
+                        maxRiskForm.value = maxRisk;
+                        avgRiskForm.value = avgRisk;
+                    }
+                    locationAll = locationsGround.concat(locationsAir);
+                  
+                    var heatmapGround = new window.google.maps.visualization.HeatmapLayer({
+                        data: locationAll
+                    });
+                    var gradient = [
+                        'rgba(0, 255, 255, 0)',
+                        'rgba(0, 255, 255, 1)',
+                        'rgba(0, 191, 255, 1)',
+                        'rgba(0, 127, 255, 1)',
+                        'rgba(0, 63, 255, 1)',
+                        'rgba(0, 0, 255, 1)',
+                        'rgba(0, 0, 223, 1)',
+                        'rgba(0, 0, 191, 1)',
+                        'rgba(0, 0, 159, 1)',
+                        'rgba(0, 0, 127, 1)',
+                        'rgba(63, 0, 91, 1)',
+                        'rgba(127, 0, 63, 1)',
+                        'rgba(191, 0, 31, 1)',
+                        'rgba(255, 0, 0, 1)'
+                    ];
+                    heatmapGround.set('gradient', gradient);
+                    heatmapGround.setMap(mapedit);
+
+                },
+                "json");
+
+
+            window.google.maps.event.addDomListener(mapedit,
+                'click',
+                function(event) {
+                    marker.setMap(null);
+                    var oFormObject = document.forms['editform'];
+                    var latForm = oFormObject.elements["latform"];
+                    var lonForm = oFormObject.elements["lonform"];
+                    var elevationForm = oFormObject.elements["elevationform"];
+                    var myLatLng = event.latLng;
+                    var lat = myLatLng.lat();
+                    var lng = myLatLng.lng();
+                    latForm.value = lat;
+                    lonForm.value = lng;
+                    //mapedit.panTo(myLatLng);
+
+                    var elevator = new window.google.maps.ElevationService;
+                    var elevation;
+
+                    elevator.getElevationForLocations({
+                            'locations': [myLatLng]
+                        },
+                        function(results, status) {
+                            if (status === 'OK') {
+                                if (results[0]) {
+                                    elevation = results[0].elevation;
+                                    elevationForm.value = elevation;
+                                } else {
+                                    elevation = 0.0;
+                                }
+                            } else {
+                                elevation = 0.0;
+                            }
+                        });
+
+                    var markerNew = new window.google.maps.Marker({
+                        position: myLatLng,
+                        map: mapedit,
+                        title: 'Fly here'
+                    });
+                    markerNew.setMap(mapedit);
+                    mylat = myLatLng.lat();
+                    mylng = myLatLng.lng();
+
+                 
+                    currentZoom = mapedit.getZoom();
+                    centre = mapedit.getCenter();
+                    Initialize();
+
+                });
+        }
+    </script>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

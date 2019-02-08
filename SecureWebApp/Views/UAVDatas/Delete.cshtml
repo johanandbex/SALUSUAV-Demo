@@ -1,0 +1,67 @@
+﻿@using SALUSUAV_Demo.Models.UAVData
+@model UavData
+
+@{
+    ViewData["Title"] = "SALUS UAV";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>UAVData</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Manufacturer)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Manufacturer)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Model)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Model)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PurchaseYear)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PurchaseYear)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxWindSpeed)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MaxWindSpeed)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxAltitude)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MaxAltitude)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BeyondSightEnabled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BeyondSightEnabled)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SafetyMechanism)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SafetyMechanism)
+        </dd>
+        <dd>
+            @Html.DisplayFor(model => model.UserId)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

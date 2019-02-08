@@ -1,0 +1,37 @@
+﻿@using Microsoft.AspNetCore.Hosting.Internal
+@{
+    ViewData["Title"] = "Welcome";
+}
+<div id="background-image-body"></div>
+
+@if (Context.User.Identity.IsAuthenticated)
+{
+    <p>Hi @(Context.User.Identity.Name)<br /></p>
+
+
+
+    <div id="isimage_validated"></div>
+
+    @section scripts {
+        <section class="scripts">
+            <script type="text/javascript">
+            $(document).ready(function() {
+                Initialize();
+            });
+
+            function Initialize() {
+                var url = '@Url.Action("GetImagesValidatedScreen", "Manage")';
+                $.get(url,"",
+                    function (response) {
+                        document.getElementById("isimage_validated").innerHTML = response;
+                    });
+            }
+            </script>
+        </section>
+    }
+
+   <!-- <img src='@Url.Action("GetUserImageFile", "Manage")' style="max-height:50%;max-width:50%;height:auto;width:auto;" />
+    <img src='@Url.Action("GetIdImageFile", "Manage")' style="max-height:50%;max-width:50%;height:auto;width:auto;" />-->
+}
+
+

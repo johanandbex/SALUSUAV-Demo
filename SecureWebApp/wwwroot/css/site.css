@@ -1,0 +1,115 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+.table {
+    width: 100%;
+    max-width: 100%
+}
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    margin-bottom: -100px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.body-content:after {
+    content: "";
+    display: block;
+}
+
+/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+/*.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}*/
+    
+.footer, .body-content:after {
+    height: 100px;
+}
+
+.button {
+    font: bold 13px Arial;
+    text-decoration: none;
+    background-color: #EEEEEE;
+    color: #333333;
+    padding: 4px 6px 4px 6px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
+}
+
+.footer {
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 1rem;
+    text-align: center;
+}
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+
+#map_canvas {
+    min-height: 600px;
+    max-height: 100%;
+}
+
+#map_canvas_top {
+    min-height: 600px;
+    max-height: 100%;
+}
+
+#map_canvas_bottom {
+    min-height: 600px;
+    max-height: 100%;
+}
+
+#map_canvas img {
+    max-width: none
+}
+
+#map_canvas_top img {
+    max-width: none
+}
+
+#map_canvas_bottom img {
+    max-width: none
+}
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
+
+    .table {
+        width: 100%;
+        max-width: 700px;
+    }
+
+    #map_canvas {
+        min-height: 300px;
+        max-height: 100%;
+    }
+
+    #map_canvas_top {
+        min-height: 300px;
+        max-height: 100%;
+    }
+
+    #map_canvas_bottom {
+        min-height: 300px;
+        max-height: 100%;
+    }
+}
